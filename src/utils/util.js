@@ -17,8 +17,8 @@ export function welcome () {
 // 阿里云 开发环境 http://39.108.154.9:8088
 export function baseUrl () {
   // return 'http://111.229.170.129:8088'
- return 'http://47.115.183.171:8088'
-//  return 'http://localhost:8088'
+//  return 'http://47.115.183.171:8088'
+ return 'http://localhost:8088'
 }
 
 // 内网 http://192.168.50.251:15674

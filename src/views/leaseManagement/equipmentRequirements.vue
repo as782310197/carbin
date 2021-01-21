@@ -91,6 +91,8 @@
     <!-- 按钮部分 -->
     <div class="button_div">
       <a-button type="primary" @click="handleAdd" v-if="actionList.add === 1">添加</a-button>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <a-button type="primary" @click="handleImport" v-if="actionList.add === 1">批量倒入</a-button>
     </div>
     <!-- 表格部分 -->
     <div class="table_div">
@@ -801,6 +803,105 @@
         </a-table>
       </a-drawer>
     </div>
+    <!-- 批量倒入部分 -->
+    <div class="add_div">
+      <a-drawer
+        :width="800"
+        @close="onClose2"
+        title="批量倒入设备"
+        :visible="importDrawerVisible"
+        :bodyStyle="{
+          paddingBottom: '80px',
+          width: '600px',
+          margin: '0 auto'
+        }"
+      >
+      <div>
+      操作说明：
+      <br />
+      1、点击下面的模板进行模板文件下载。
+      <br />
+      2、打开所下载的模板excel文件,保持文件的格式不变,往文件添加需求。
+      <br />
+      3、将添加好的excel文件点击下面上传excel按钮进行文件上传。
+      <br />
+      </div>
+      <div style="margin-top:50px">
+      <a-form :form="form" :label-col="{ span: 8 }" :wrapper-col="{ span: 16 }" @submit="handleSaveSubmit">
+          <a-row>
+            <a-col :span="12">
+              <a-form-item label="关联合同">
+                <a-input
+                  v-decorator="['contract', {rules: [
+                    { required: true, message: '关联合同不能为空' }
+                  ]}]"
+                  placeholder="请输入关联合同"
+                />
+              </a-form-item>
+            </a-col>
+            <a-col :span="4" class="chiose_contract_btn">
+              <a-button type="primary" @click="handleChioseContract">+ 选择合同</a-button>
+            </a-col>
+            <!-- 选择合同modal弹框 -->
+            <div class="chiose_contract_box">
+              <a-modal
+                :visible="chioseContractVisible"
+                :footer="null"
+                @cancel="closeChioseContractModal"
+                title="选择合同"
+                width="50%"
+              >
+                <s-table
+                  :columns="chioseContractColumns"
+                  :data="chioseContractData"
+                  :pagination="chioseContractPagination"
+                  :rowKey="record => record.key"
+                  ref="table"
+                >
+                  <template slot="operation" slot-scope="text, record">
+                    <a @click="handleChiose(record)">
+                      选择
+                    </a>
+                  </template>
+                </s-table>
+              </a-modal>
+            </div>
+          </a-row>
+        <a-row>
+          <a-form-item label="导入文件">
+            <a-upload
+              name="file"
+              :multiple="true"
+              :headers="headers"
+              :fileList="downloadFiles"
+              :customRequest="downloadFilesCustomRequest"
+            >
+              <a-button type="primary" size="small"> <a-icon type="upload" /> 上传excel </a-button>
+            </a-upload>
+          </a-form-item>
+        </a-row>
+      </a-form>
+      </div>
+       <div
+          :style="{
+            position: 'absolute',
+            right: 0,
+            bottom: 0,
+            width: '100%',
+            borderTop: '1px solid #e9e9e9',
+            padding: '10px 16px',
+            background: '#fff',
+            textAlign: 'right',
+            zIndex: 1,
+          }"
+        >
+          <a-button :style="{ marginRight: '8px' }" @click="onClose2">
+            取消
+          </a-button>
+          <a-button type="primary" html-type="submit" @click="handleSaveSubmit2" :disabled="saveDisabled">保存</a-button>
+        </div>
+      </a-drawer>
+    </div>
   </a-card>
 </template>
 
@@ -810,9 +911,9 @@ import moment from 'moment'
 import UploadImgGroup from '@/components/UploadImgGroup'
 import { STable } from '@/components'
 import { findBizEnterpriseDeviceRequirementPage, getBizEnterpriseDeviceRequirement, getDeviceRecord, saveBizEnterpriseDeviceRequirement, removeBizEnterpriseDeviceRequirement, platformAuditPass, platformAuditReject, enterpriseAuditPass, enterpriseAuditReject } from '@/api/bizEnterpriseDeviceRequirement.js'
-import { getfindBizContractPage } from '@/api/bizContract'
+import { getfindBizContractPage, uploadDeviceOrderExcel } from '@/api/bizContract'
 import { formatTime } from '@/utils/util'
-
+import { baseUrl } from '@/utils/util.js'
 // 引入权限数据
 import { mapState } from 'vuex'
 
@@ -823,6 +924,9 @@ export default {
 	},
   data () {
     return {
+      fileList: [],
+      downloadFiles: [],
+      importDrawerVisible: false, // 导入抽屉的可见性
       searchForm: this.$form.createForm(this), // 搜索表单
       form: this.$form.createForm(this), // 添加表单
       bankInfo: this.$form.createForm(this), // 银行信息添加表单
@@ -834,15 +938,21 @@ export default {
       readDrawerVisible: false, // 查看抽屉的可见性
       recordDrawerVisible: false, // 设备巡查的可见性
       chioseContractVisible: false, // 选择合同modal弹框的可见性
+      contractId: '',
       readListData: {
         requirement: {},
         deviceInfo: {},
         account: {}
       }, // 存放查看信息的数组
       predictRent: '100',
+      param: {},
       actionList: {}, // 权限按钮
       pagination: { // 表格的分页设置
         showTotal: (total, range) => `第${range[0]}-${range[1]}条` + ` ` + `共 ${total} 条记录`
+      },
+       // 上传时的头部信息
+      headers: {
+        authorization: 'authorization-text'
       },
       startDate: '',
       endDate: '',
@@ -1069,7 +1179,11 @@ export default {
   computed: {
     ...mapState({
       roles: state => state.user.roles
-    })
+    }),
+     // 基础路径
+    baseURL () {
+      return baseUrl()
+    }
   },
   watch: {
     // predictRent () {
@@ -1113,6 +1227,48 @@ export default {
             }
           })
         }
+      })
+    },
+     downloadFilesCustomRequest (data) {
+      var fd = new FormData()
+      fd.append('file', data.file)
+      
+       this.form.validateFields((err, values) => {
+        if (!err) {
+          alert(values.contract)
+          fd.append('id',values.contract)
+         uploadDeviceOrderExcel(fd).then(res => {      
+          alert(res.message)      
+        })
+        }
+       })
+    },
+    // 上传附件
+    handleChange (info) {
+      this.fileList = info.fileList
+      if (info.file.status !== 'uploading') {
+        console.log(info.file, info.fileList);
+      }
+      if (info.file.status === 'done') {
+        this.$message.success(`${info.file.name} file uploaded successfully`);
+      } else if (info.file.status === 'error') {
+        this.$message.error(`${info.file.name} file upload failed.`);
+      }
+    },
+    // 上传文件之前的钩子，参数为上传的文件，若返回 false 则停止上传。
+    beforeUpload (file) {
+      return new Promise((resolve, reject) => {
+        const isPDF = file.type === 'application/pdf'
+        if (!isPDF) {
+          this.$message.error('您只能上传PDF文件!')
+          return reject(new Error('您只能上传PDF文件'))
+        }
+        // const isLt2M = file.size / 1024 / 1024 < 2
+        // if (!isLt2M) {
+        //   this.$message.error('文件大小不能超过2MB!')
+        //   return reject(new Error('文件大小不能超过2MB'))
+        // }
+        return resolve(true)
       })
     },
     // 企业审核通过
@@ -1320,6 +1476,9 @@ export default {
       this.addDrawerTitle = '添加设备需求'
       this.addDrawerVisible = true
     },
+    handleImport () {
+      this.importDrawerVisible = true
+    },
     // 修改按钮
     handleEdit (record) {
       getBizEnterpriseDeviceRequirement({ id: record.id }).then(res => {
@@ -1433,6 +1592,18 @@ export default {
       })
     },
     // 保存按钮
+    handleSaveSubmit2 () {
+     var fd = new FormData()
+      this.form.validateFields((err, values) => {
+        if (!err) {
+           fd.append('file', data.file)
+           alert(data.file.contract)
+          uploadDeviceOrderExcel(fd,values).then(res => {
+          alert(res.message)
+         })
+        }
+      })
+    },
     handleSaveSubmit () {
       this.saveDisabled = true
       this.form.validateFields((err, val) => {
@@ -1568,6 +1739,9 @@ export default {
     // 取消删除按钮
     handleCancelDeletion () {
       this.$message.info('已取消删除')
+    },
+    onClose2 () {
+      this.importDrawerVisible = false
     },
     // 关闭添加修改抽屉按钮
     onClose () {

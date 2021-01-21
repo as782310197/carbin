@@ -80,6 +80,8 @@
     <!-- 按钮部分 -->
     <div class="button_div">
       <a-button type="primary" @click="handleAdd" v-if="actionList.add === 1">添加</a-button>
+      &nbsp;&nbsp;&nbsp;&nbsp;
+      <a-button type="primary" @click="handleImport" v-if="actionList.add === 1">批量倒入</a-button>
     </div>
     <!-- 表格部分 -->
     <div class="table_div">
@@ -668,6 +670,46 @@
         </a-descriptions>
       </a-drawer>
     </div>
+     <!-- 批量倒入部分 -->
+    <div class="add_div">
+      <a-drawer
+        :width="800"
+        @close="onClose2"
+        title="批量倒入"
+        :visible="importDrawerVisible"
+        :bodyStyle="{
+          paddingBottom: '80px',
+          width: '600px',
+          margin: '0 auto'
+        }"
+      >
+        <a-descriptions title="批量导入车辆">
+          <a-descriptions-item label="操作说明" span="3">
+            1、上传文件需要与下载模板文件模板列一致。
+            <br />
+            2、若系统检查到异常情况,将会直接回滚本次所有操作,需要下载检查所在行,再进行上传。
+            <br />
+          </a-descriptions-item>
+          <a-descriptions-item label="车辆表" span="3">
+            <a href="http://boss.wangshuibao.com/api/uploadFiles/img_2020_11_20102118803.xlsx">
+              <a-button icon="download" size="small">模板下载</a-button>
+            </a>
+          </a-descriptions-item>
+          <a-descriptions-item label="上传文件" span="3">
+            <a-upload
+              name="file"
+              :multiple="true"
+              :headers="headers"
+              :fileList="downloadFiles"
+              :customRequest="downloadFilesCustomRequest"
+            >
+              <a-button type="primary" size="small"> <a-icon type="upload" /> 上传excel </a-button>
+            </a-upload>
+          </a-descriptions-item>
+
+        </a-descriptions>
+      </a-drawer>
+    </div>
   </a-card>
 </template>
 
@@ -700,6 +742,7 @@ export default {
 	},
   data () {
     return {
+      importDrawerVisible: false, // 导入抽屉的可见性
       searchForm: this.$form.createForm(this), // 搜索表单
       form: this.$form.createForm(this), // 添加表单
       bankInfo: this.$form.createForm(this), // 银行信息添加表单
@@ -1055,6 +1098,9 @@ export default {
       this.addDrawerTitle = '添加租车需求'
       this.addDrawerVisible = true
     },
+    handleImport () {
+      this.importDrawerVisible = true
+    },
     // 修改按钮
     /* handleEdit (record) {
       this.addDrawerTitle = '修改车辆信息'
@@ -1280,6 +1326,9 @@ export default {
     // 取消删除按钮
     handleCancelDeletion () {
       this.$message.info('已取消删除')
+    },
+    onClose2 () {
+      this.importDrawerVisible = false
     },
     // 关闭添加修改抽屉按钮
     onClose () {

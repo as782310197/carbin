@@ -5,7 +5,8 @@ const api = {
   getBizContract: '/biz/bizContract/get', // 获取合同
   saveBizContract: '/biz/bizContract/save', // 保存合同
   getContractById: '/biz/bizContract/getContract', // 根据合同id获取合同
-  saveContractAttachment: '/biz/bizContract/saveContractAttachment' // 保存合同附件，id与content字段有效
+  saveContractAttachment: '/biz/bizContract/saveContractAttachment', // 保存合同附件，id与content字段有效
+  uploadDeviceOrderExcel: '/upload/uploadDeviceOrderExcel'
 }
 
 export default api
@@ -54,6 +55,16 @@ export function getContractById (parameter) {
   })
 }
 
+export function uploadDeviceOrderExcel (parameter) {
+  return axios({
+    url: api.uploadDeviceOrderExcel,
+    method: 'post',
+    data: parameter,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  })
+}
 export function saveContractAttachment (parameter) {
   return axios({
     url: api.saveContractAttachment,

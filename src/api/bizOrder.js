@@ -5,7 +5,7 @@ const api = {
   saveBizOrder: '/biz/bizOrder/save',
   terminatesBizOrder: '/biz/bizOrder/terminates', // 终止用车订单
   findDeviceOrderPage: '/biz/bizOrder/findDeviceOrderPage', // 设备订单
-  uploadDeviceOrderExcel: '/biz/bizOrder/uploadDeviceOrderExcel' // 上传excel
+  uploadDeviceOrderExcel: '/biz/bizOrder/uploadDeviceOrderExcel', // 上传excel
 }
 
 export default api
