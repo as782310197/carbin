@@ -168,7 +168,7 @@
             3、上传完成需要前往<strong>核算管理-->设备账单-->手动生成账单-->打款支付。</strong>
           </a-descriptions-item>
           <a-descriptions-item label="租金结算表" span="3">
-            <a href="http://boss.wangshuibao.com/api/uploadFiles/img_2020_11_20102118803.xlsx">
+            <a href="http://boss.wangshuibao.com/api/uploadFiles/strdsaf.xlsx">
               <a-button icon="download" size="small">模板下载</a-button>
             </a>
           </a-descriptions-item>
@@ -475,9 +475,15 @@ export default {
       var fd = new FormData()
       fd.append('file', data.file)
       uploadDeviceOrderExcel(fd).then(res => {
-        // if (res.code === 0) {
+        if (res.code === 0) {
+          console.log(res)
           alert(res.message)
-        // }
+          this.importDrawerVisible = false
+         this.$refs.table.refresh(true)
+          // self.$refs.table.refresh(true)
+        }else{
+          alert(res.message)
+        }
         // if (res.code === 1) {
         //   var result = res.result
         //   var failedCount = result.failedCount

@@ -466,6 +466,7 @@ export default {
       loadData: parameter => {
         Object.assign(parameter, this.queryParam)
         return findBizBillPage(parameter).then(res => {
+          console.log(res.result)
           return res.result
         })
       },
