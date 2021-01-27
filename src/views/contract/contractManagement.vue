@@ -134,6 +134,7 @@
                 { required: true, message: '租赁公司名称不能为空' }
               ]}]"
               placeholder="请输入租赁公司名称"
+              defaultValue="合生科技有限公司"
             />
           </a-form-item>
           <a-form-item hidden="hidden"><!-- 企业id -->
