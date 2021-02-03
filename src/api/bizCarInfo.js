@@ -7,7 +7,8 @@ const api = {
 	auditPassCarInfo: '/biz/bizCarInfo/auditPassCarInfo', // 审核通过
 	auditRejectCarInfo: '/biz/bizCarInfo/auditRejectCarInfo', // 审核不通过
 	// 车主管理（会员）
-	findMemberPage: '/biz/bizMember/findMemberPage', // 获取车主信息分页
+  findMemberPage: '/biz/bizMember/findMemberPage', // 获取车主信息分页
+  findMemberPage2: '/biz/bizMember/findMemberPage2', // 获取车主信息分页
   updateBizMember: '/biz/bizMember/updateBizMember', // 更新车辆信息
   memberAuthPass: '/biz/bizMember/memberAuthPass', // 车主认证通过
   memberAuthFailed: '/biz/bizMember/memberAuthFailed' // 车主认证不通过
@@ -58,6 +59,16 @@ export function updateCarInfo (parameter) {
 export function findMemberPage (parameter) {
   return axios({
     url: api.findMemberPage,
+    method: 'post',
+    data: parameter,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  })
+}
+export function findMemberPage2 (parameter) {
+  return axios({
+    url: api.findMemberPage2,
     method: 'post',
     data: parameter,
     headers: {

@@ -141,7 +141,8 @@ const vueConfig = {
       '/api': {
         // target: 'http://111.229.170.129:8088',
         //正式 target: 'http://47.115.183.171:8088',
-        target: 'http://localhost:8088',
+        正式target: 'http://47.115.183.171:8088',
+        // target: 'http://localhost:8088',
         ws: false,
         changeOrigin: true,
         pathRewrite: { '/api': '' }

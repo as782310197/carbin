@@ -264,6 +264,31 @@ export const asyncRouterMap = [
           }
         ]
       },
+      //设备主信息
+      {
+        path: '/personInfo',
+        name: 'personInfo',
+        component: PageView,
+        redirect: '/personInfo/shebeiInfo',
+        meta: {
+          title: '设备主信息',
+          icon: 'file',
+          permission: ['personInfo']
+        },
+        children: [
+          {
+            path: '/personInfo/shebeiInfo',
+            name: 'shebeiInfo',
+            // src\views\contract\contractManagement.vue
+            component: () => import('@/views/personInfo/shebeiInfo'),
+            meta: {
+              title: '个体工商户',
+              keepAlive: false,
+              permission: ['shebeiInfo']
+            }
+          }
+        ]
+      },
       // 车辆租赁
       {
         path: '/carLeaseManagement',
