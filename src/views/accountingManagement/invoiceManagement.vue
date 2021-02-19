@@ -109,85 +109,8 @@
     <div class="check_div">
       <a-drawer
         :width="650"
-        @close="onReadDrawerClose"
-        title="查看发票信息"
-        :visible="readDrawerVisible"
-        :bodyStyle="{
-          paddingBottom: '80px'
-        }"
-      >
-        <a-descriptions title="基本信息" size="small" bordered>
-          <a-descriptions-item label="发票抬头" :span="3">
-            {{ readListData.enterpriseName }}
-          </a-descriptions-item>
-          <a-descriptions-item label="税号" :span="3">
-            {{ readListData.license }}
-          </a-descriptions-item>
-          <a-descriptions-item label="发票金额" :span="3">
-            {{ readListData.amount }}
-          </a-descriptions-item>
-          <a-descriptions-item label="账单周期" :span="3">
-            {{ readListData.billCycle }}
-          </a-descriptions-item>
-          <a-descriptions-item label="发票类型" :span="3">
-            {{ readListData.invoiceTypeName }}
-          </a-descriptions-item>
-          <a-descriptions-item label="状态" :span="3">
-            {{ readListData.statusName }}
-          </a-descriptions-item>
-          <a-descriptions-item label="开户银行名称" :span="3">
-            {{ readListData.accountHolder }}
-          </a-descriptions-item>
-          <a-descriptions-item label="基本开户账号" :span="3">
-            {{ readListData.account }}
-          </a-descriptions-item>
-          <a-descriptions-item label="注册场所地址" :span="3">
-            {{ readListData.address }}
-          </a-descriptions-item>
-          <a-descriptions-item label="注册固定电话" :span="3">
-            {{ readListData.telphone }}
-          </a-descriptions-item>
-        </a-descriptions>
-        <a-descriptions title="收货地址" size="small" bordered>
-          <a-descriptions-item label="姓名" :span="3">
-            {{ readListData.receiverName }}
-          </a-descriptions-item>
-          <a-descriptions-item label="联系电话" :span="3">
-            {{ readListData.receiverPhone }}
-          </a-descriptions-item>
-          <a-descriptions-item label="所在城市" :span="3">
-            {{ readListData.receiverCity }}
-          </a-descriptions-item>
-          <a-descriptions-item label="详细地址" :span="3">
-            {{ readListData.receiverAddress }}
-          </a-descriptions-item>
-          <a-descriptions-item label="备注" :span="3">
-            {{ readListData.memo }}
-          </a-descriptions-item>
-        </a-descriptions>
-         <a-descriptions title="快递信息" size="small" bordered>
-          <a-descriptions-item label="快递单号" :span="3">
-            {{ readListData.sendNo }}
-          </a-descriptions-item>
-         
-         
-         
-          <a-descriptions-item label="快递图片" :span="3">
-            <viewer class="imgBox" :images="readListData.licenseImage2" v-if="readListData.licenseImage2">
-              <img
-                class="img"
-                :src="readListData.licenseImage2"
-              >
-            </viewer>
-          </a-descriptions-item>
-        </a-descriptions>
-      </a-drawer>
-    </div>
-    <div class="check_div">
-      <a-drawer
-        :width="650"
         @close="onReadDrawerClose2"
-        title="上传快递信息"
+        title="查看发票信息"
         :visible="readDrawerVisible2"
         :bodyStyle="{
           paddingBottom: '80px'
@@ -212,7 +135,9 @@
           <a-descriptions-item label="状态" :span="3">
             {{ readListData.statusName }}
           </a-descriptions-item>
-         
+         <a-descriptions-item label="快递单号" :span="3">
+            {{ readListData.idStr }}
+          </a-descriptions-item>
          
         </a-descriptions>
         <hr />
@@ -256,7 +181,196 @@
        
       </a-drawer>
     </div>
-    
+    <!-- 信息管理 -->
+    <!-- <div class="info_div">
+      <a-modal
+        :visible="infoModalVisable"
+        title="信息管理"
+        width="50%"
+        @ok="handleInfoSubmit"
+        @cancel="handleInfoCancel"
+      >
+        <a-form :form="infoForm" @submit="handleInfoSubmit" :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
+          <a-form-item label="企业抬头">
+            <a-input
+              v-decorator="['name', {rules: [
+                { required: true, message: '企业抬头不能为空' }
+              ]}]"
+              placeholder="请输入企业抬头"
+            />
+          </a-form-item>
+          <a-form-item label="发票类型">
+            <a-radio-group
+              v-decorator="['type', { initialValue: 0, rules: [{ required: true, message: '请选择发票类型' }]}]"
+            >
+              <a-radio :value="0">增值税普通发票</a-radio>
+              <a-radio :value="1">增值税专用发票</a-radio>
+            </a-radio-group>
+          </a-form-item>
+          <a-form-item label="税务登记号">
+            <a-input
+              v-decorator="['number', {rules: [
+                { required: true, message: '税务登记号不能为空' }
+              ]}]"
+              placeholder="请输入税务登记号"
+            />
+          </a-form-item>
+          <a-form-item label="开户银行名称">
+            <a-input
+              v-decorator="['bankName', {rules: [
+                { required: false }
+              ]}]"
+              placeholder="请输入开户银行名称"
+            />
+          </a-form-item>
+          <a-form-item label="基本开户账号">
+            <a-input
+              v-decorator="['accountNumber', {rules: [
+                { required: false }
+              ]}]"
+              placeholder="请输入基本开户账号"
+            />
+          </a-form-item>
+          <a-form-item label="注册场所地址">
+            <a-input
+              v-decorator="['address', {rules: [
+                { required: false }
+              ]}]"
+              placeholder="请输入注册场所地址"
+            />
+          </a-form-item>
+          <a-form-item label="注册固定电话">
+            <a-input
+              v-decorator="['phone', {rules: [
+                { required: false }
+              ]}]"
+              placeholder="请输入注册固定电话"
+            />
+          </a-form-item>
+        </a-form>
+      </a-modal>
+    </div> -->
+    <!-- 收货地址 -->
+    <!-- <div class="address_div">
+      <a-modal
+        :visible="addressModalVisable"
+        title="收货地址"
+        width="50%"
+        @ok="handleAddressSubmit"
+        @cancel="handleAddressCancel"
+      >
+        <a-form :form="addressForm" @submit="handleAddressSubmit" :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
+          <a-form-item label="姓名">
+            <a-input
+              v-decorator="['name', {rules: [
+                { required: false }
+              ]}]"
+              placeholder="请输入收方姓名"
+            />
+          </a-form-item>
+          <a-form-item label="手机号码">
+            <a-input
+              v-decorator="['phone', {rules: [
+                { required: false }
+              ]}]"
+              placeholder="请输入手机号码"
+            />
+          </a-form-item>
+          <a-form-item label="收货城市">
+            <a-input
+              v-decorator="['city', {rules: [
+                { required: false }
+              ]}]"
+              placeholder="请输入收货城市"
+            />
+          </a-form-item>
+          <a-form-item label="详细地址">
+            <a-input
+              v-decorator="['address', {rules: [
+                { required: false }
+              ]}]"
+              placeholder="请输入详细地址"
+            />
+          </a-form-item>
+        </a-form>
+      </a-modal>
+    </div> -->
+    <!-- 查看信息部分 -->
+    <div class="check_div">
+      <a-drawer
+        :width="600"
+        @close="onReadDrawerClose"
+        title="查看结算信息"
+        :visible="readDrawerVisible"
+        :bodyStyle="{
+          paddingBottom: '80px'
+        }"
+      >
+        <a-descriptions size="small" title="基本信息" bordered :column="4">
+          <a-descriptions-item label="账单名称" :span="4">
+            {{ readListData.billName }}
+          </a-descriptions-item>
+         
+          <a-descriptions-item label="账单周期" :span="4">
+            {{ readListData.billCycle }}
+          </a-descriptions-item>
+          <a-descriptions-item label="需支付金额" :span="4">
+            {{ readListData.amount }}元
+          </a-descriptions-item>
+          <a-descriptions-item label="数量" :span="4">
+            {{ readListData.count }}
+          </a-descriptions-item>
+          <a-descriptions-item label="账单金额" :span="4">
+            {{ readListData.rent }}元
+          </a-descriptions-item>
+          <a-descriptions-item label="支付状态" :span="4">
+            {{ readListData.statusName }}
+          </a-descriptions-item>
+          <a-descriptions-item label="支付凭证" :span="4" v-if="!upLoadVisible || !showUpload">
+            <!-- <img :src="readListData.businessLicenseImg"> -->
+            <viewer class="imgBox" :images="readListData.voucherImage" v-if="readListData.voucherImage">
+              <img
+                class="img"
+                :src="readListData.voucherImage"
+              >
+            </viewer>
+          </a-descriptions-item>
+        </a-descriptions>
+        <a-divider v-if="upLoadVisible" />
+        <!-- 上传支付凭证 -->
+        <div v-if="upLoadVisible && showUpload">
+          <a-form :form="upLoadForm" @submit="handlefixPayment" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
+            <a-form-item label="上传支付凭证">
+              <a-upload
+                :action="`${baseURL}/upload/singleFileUpload`"
+                list-type="picture-card"
+                :file-list="fileListImg"
+                :before-upload="beforeUpload"
+                @preview="handlePreview"
+                @change="handleChange"
+              >
+                <div v-if="fileListImg.length < 1">
+                  <a-icon type="plus" />
+                  <div class="ant-upload-text">
+                    上传图片
+                  </div>
+                </div>
+              </a-upload>
+              <a-modal :visible="previewVisibleImg" :footer="null" @cancel="handleCancelImg">
+                <img alt="example" style="width: 100%" :src="previewImage" />
+              </a-modal>
+            </a-form-item>
+            <div class="fix_payment_btn_box">
+              <a-button type="primary" class="fix_payment_btn" @click="handlefixPayment">确定已打款</a-button>
+            </div>
+          </a-form>
+        </div>
+        <!-- 已上传支付凭证 -->
+        <div v-else-if="!showUpload" class="confirmed-box">
+          <span>已上传支付凭证</span>
+        </div>
+      </a-drawer>
+    </div>
   </a-card>
 </template>
 
@@ -484,15 +598,17 @@ export default {
           uploadNo(values).then(res => {
             if (res.code === 1) {
               this.$message.info('上传成功')
-             
+              // this.$message.success('保存成功')
               location.reload() // 强迫浏览器刷新当前页面
-              
+              // this.$refs.table.refresh(true)
+              // this.form.refresh()
+              // this.form.resetFields()
               // this.$refs.table.refresh(true)
             } else {
               this.$message.error(res.message)
             }
-            this.addDrawerVisible2 = false
-            this.saveDisabled2 = false
+            this.addDrawerVisible = false
+            this.saveDisabled = false
           })
           // 查询条件entity对象里放查询各个查询字段
           // const param = {

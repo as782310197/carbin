@@ -346,7 +346,8 @@ export default {
           { label: '查看', value: 'get', defaultChecked: false },
           // { label: '审核', value: 'examine', defaultChecked: false },
           { label: '导入', value: 'import', defaultChecked: false },
-          { label: '导出', value: 'export', defaultChecked: false }
+          { label: '导出', value: 'export', defaultChecked: false },
+          { label: '上传凭证', value: 'open', defaultChecked: false }
         ]
         resolve(data)
       }).then(res => {

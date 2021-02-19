@@ -904,7 +904,7 @@ export default {
             return
           }
           saveBizEnterprise(values).then(res => {
-            alert(res.code)
+            
             if (res.code === 1) {
               this.$message.success('保存成功')
               this.form.resetFields()

@@ -282,7 +282,7 @@ export const asyncRouterMap = [
             // src\views\contract\contractManagement.vue
             component: () => import('@/views/personInfo/shebeiInfo'),
             meta: {
-              title: '个体工商户',
+              title: '财务管理',
               keepAlive: false,
               permission: ['shebeiInfo']
             }

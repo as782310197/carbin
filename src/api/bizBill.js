@@ -18,7 +18,8 @@ const api = {
   rejectBizBillInovice: '/biz/bizBillInvoice/rejectBizBillInovice', // 发票审核驳回
   // 设备账单模块
   findDeviceBillPage: '/biz/bizBill/findDeviceBillPage', // 获取设备账单分页
-  getTaxCategoryTree: '/system/taxCategory/getTaxCategoryTree' // 获取税收分类树
+  getTaxCategoryTree: '/system/taxCategory/getTaxCategoryTree', // 获取税收分类树
+  uploadNo: '/biz/bizBillInvoice/loadNo' //跟新快递单号
 }
 
 export default api
@@ -26,6 +27,17 @@ export default api
 export function cancleBizBillInvoice (parameter) {
   return axios({
     url: api.cancleBizBillInvoice,
+    method: 'post',
+    data: parameter,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
+  })
+}
+
+export function uploadNo (parameter) {
+  return axios({
+    url: api.uploadNo,
     method: 'post',
     data: parameter,
     headers: {

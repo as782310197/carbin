@@ -216,13 +216,13 @@
           <a-descriptions-item label="手机号码" :span="2">
             {{ readListData.phone }}
           </a-descriptions-item>
-          <a-descriptions-item label="头像" :span="2">
+          <!-- <a-descriptions-item label="头像" :span="2">
             <viewer class="imgBox" :images="readListData.portrait" v-if="readListData.portrait">
               <img
                 :src="readListData.portrait"
               >
             </viewer>
-          </a-descriptions-item>
+          </a-descriptions-item> -->
           <a-descriptions-item label="身份证正面照" :span="2">
             <viewer class="imgBox" :images="readListData.idCardFront" v-if="readListData.idCardFront">
               <img

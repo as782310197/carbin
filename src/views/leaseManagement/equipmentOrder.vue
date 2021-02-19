@@ -66,7 +66,7 @@
     </div>
     <!-- 按钮部分 -->
     <div class="button_div">
-      <a-button type="primary" @click="handleImport">导入工程租金结算</a-button>
+      <a-button type="primary" @click="handleImport">导入设备租金结算</a-button>
     </div>
     <!-- 表格部分 -->
     <div class="table_div">
@@ -113,16 +113,7 @@
           <a-descriptions-item label="设备类型" :span="2">
             {{ readListData.deviceType }}
           </a-descriptions-item>
-          <a-descriptions-item label="设备型号" :span="2">
-            {{ readListData.model }}
-          </a-descriptions-item>
-          <a-descriptions-item label="机械品牌" :span="2">
-            {{ readListData.brand }}
-          </a-descriptions-item>
-          <a-descriptions-item label="账单周期" :span="2">
-            {{ readListData.startDate }}
-          </a-descriptions-item>
-          <a-descriptions-item label="账单租金" :span="2">
+          <a-descriptions-item label="设备租金" :span="2">
             {{ readListData.rent }}
           </a-descriptions-item>
           <a-descriptions-item label="发放租金" :span="2">
@@ -131,17 +122,14 @@
           <a-descriptions-item label="企业金额" :span="2">
             {{ readListData.amount }}
           </a-descriptions-item>
-          <a-descriptions-item label="企业手续费" :span="2">
-            {{ readListData.charge }}
-          </a-descriptions-item>
-          <a-descriptions-item label="发票手续费" :span="2">
-            {{ readListData.taxCharge }}
+          <a-descriptions-item label="综合服务费" :span="2">
+            {{readListData.charge+readListData.taxCharge }}
           </a-descriptions-item>
           <a-descriptions-item label="订单状态" :span="2">
             {{ readListData.statusName }}
           </a-descriptions-item>
           <a-descriptions-item label="创建时间" :span="2">
-            {{ readListData.taxCharge }}
+            {{ readListData.createTime }}
           </a-descriptions-item>
         </a-descriptions>
       </a-drawer>
@@ -159,16 +147,16 @@
           margin: '0 auto'
         }"
       >
-        <a-descriptions title="导入工程租金结算">
+        <a-descriptions title="导入设备租金结算">
           <a-descriptions-item label="操作说明" span="3">
             1、上传文件需要与下载模板文件模板列一致。
             <br />
             2、若系统检查到异常情况,将会直接回滚本次所有操作,需要下载检查所在行,再进行上传。
             <br />
-            3、上传完成需要前往<strong>核算管理-->设备账单-->手动生成账单-->打款支付。</strong>
+            3、上传完成需要前往<strong>账单管理-->设备账单-->手动生成账单-->打款支付。</strong>
           </a-descriptions-item>
           <a-descriptions-item label="租金结算表" span="3">
-            <a href="http://boss.wangshuibao.com/api/uploadFiles/strdsaf.xlsx">
+            <a href="http://boss.wangshuibao.com/api/uploadFiles/租金结算表.xlsx">
               <a-button icon="download" size="small">模板下载</a-button>
             </a>
           </a-descriptions-item>
@@ -400,7 +388,7 @@ export default {
       this.searchForm.validateFields((err, values) => {
         if (!err) {
           // 查询条件entity对象里放查询各个查询字段
-          alert(values.carOwner)
+         
           const param = {
             entity: {
               carOwner: values.carOwner,
@@ -475,14 +463,14 @@ export default {
       var fd = new FormData()
       fd.append('file', data.file)
       uploadDeviceOrderExcel(fd).then(res => {
-        if (res.code === 0) {
-          console.log(res)
-          alert(res.message)
+        if (res.code === 1) {
+           this.$message.info('导入成功');
+         
+        }else{
+          this.$message.info(res.message);
           this.importDrawerVisible = false
          this.$refs.table.refresh(true)
           // self.$refs.table.refresh(true)
-        }else{
-          alert(res.message)
         }
         // if (res.code === 1) {
         //   var result = res.result

@@ -152,7 +152,7 @@ export default {
       // option: {},
       carOption: {
         title: {
-          text: '车辆支付月统计图'
+          text: '支付月统计图'
         },
         tooltip: {
           trigger: 'axis'
@@ -190,7 +190,7 @@ export default {
       },
       deviceOption: {
         title: {
-          text: '设备支付月统计图'
+          text: '支付月统计图'
         },
         tooltip: {
           trigger: 'axis'
